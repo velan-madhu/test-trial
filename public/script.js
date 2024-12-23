@@ -13,7 +13,8 @@ scene.add(light);
 // Load the GLB model using GLTFLoader
 const loader = new THREE.GLTFLoader();
 loader.load(
-    './assets/New-Year-Wishes-AR.glb', // Path to the GLB file in the assets folder
+    // './assets/New-Year-Wishes-AR.glb', // Path to the GLB file in the assets folder
+    './public/assets/New-Year-Wishes-AR.glb',
     function (gltf) {
         scene.add(gltf.scene);
     },
