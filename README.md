@@ -28,29 +28,41 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById('container').appendChild(renderer.domElement);
 
-        // Add a subtle ambient light to light up all objects
+        // Add ambient light
         const ambientLight = new THREE.AmbientLight(0x404040, 2); // Soft white light
         scene.add(ambientLight);
 
-        // Add a directional light for stronger illumination
+        // Add directional light
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
-        directionalLight.position.set(5, 5, 5); // Adjust position for better shadows
-        directionalLight.castShadow = true; // Enable shadows
+        directionalLight.position.set(5, 5, 5);
+        directionalLight.castShadow = true;
         scene.add(directionalLight);
-
-        // Add helper for debugging light positions (optional)
-        const lightHelper = new THREE.DirectionalLightHelper(directionalLight, 1);
-        scene.add(lightHelper);
 
         // Load the GLB model
         const loader = new THREE.GLTFLoader();
         loader.load(
-            './public/assets/New-Year-Wishes-AR.glb',
+            './New-Year-Wishes-AR.glb', // Ensure the path matches your setup
             function (gltf) {
-                // Scale and position the model as needed
                 const model = gltf.scene;
-                model.scale.set(1, 1, 1); // Adjust scale
-                model.position.set(0, 0, 0); // Center model
+
+                // Set model position and scale
+                model.scale.set(1, 1, 1);
+                model.position.set(0, 0, 0);
+
+                // Traverse model to ensure proper rendering
+                model.traverse((node) => {
+                    if (node.isMesh) {
+                        node.castShadow = true;
+                        node.receiveShadow = true;
+
+                        // Check for materials and enable proper rendering
+                        if (node.material) {
+                            node.material.metalness = 0; // Adjust if metallic look is causing artifacts
+                            node.material.roughness = 0.5; // Tune roughness for smooth visuals
+                        }
+                    }
+                });
+
                 scene.add(model);
             },
             undefined,
@@ -59,8 +71,8 @@
             }
         );
 
-        // Position the camera
-        camera.position.set(2, 2, 5); // Adjusted for a better view of the model
+        // Camera position
+        camera.position.set(3, 3, 7); // Adjust for better framing
 
         // Animation loop
         function animate() {
