@@ -23,7 +23,8 @@
 </head>
 <body>
     <model-viewer 
-        src="./public/assets/New-Year-Wishes-AR.glb" 
+             src="https://create.overlyapp.com/webar/7a5d4d3080557d91726d3a96199b17ff07e852d3"
+<!--         src="./public/assets/New-Year-Wishes-AR.glb"  -->
         alt="A 3D model" 
         auto-rotate 
         camera-controls 
