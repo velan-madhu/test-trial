@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GLB Viewer</title>
+    <title>Improved GLB Viewer</title>
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
         body {
@@ -12,11 +12,12 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f0f0f0;
+            background-color: #f0f0f0; /* Light background color */
         }
         model-viewer {
-            width: 100%;
-            height: 100%;
+            width: 80%; /* Adjust size as needed */
+            height: 80%; /* Adjust size as needed */
+            background-color: transparent; /* Make model-viewer background transparent */
         }
     </style>
 </head>
@@ -26,7 +27,11 @@
         alt="A 3D model" 
         auto-rotate 
         camera-controls 
-        background-color="#ffffff">
+        ar 
+        environment-image="neutral" 
+        exposure="1" 
+        skybox-image=""
+        shadow-intensity="1">
     </model-viewer>
 </body>
 </html>
