@@ -28,41 +28,24 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById('container').appendChild(renderer.domElement);
 
-        // Add ambient light
-        const ambientLight = new THREE.AmbientLight(0x404040, 2); // Soft white light
+        // Add ambient light (soft, global lighting)
+        const ambientLight = new THREE.AmbientLight(0x404040, 2); // Soft light
         scene.add(ambientLight);
 
-        // Add directional light
+        // Add directional light (strong, focused lighting)
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
-        directionalLight.position.set(5, 5, 5);
-        directionalLight.castShadow = true;
+        directionalLight.position.set(5, 5, 5); // Position the light
+        directionalLight.castShadow = true; // Enable shadows if needed
         scene.add(directionalLight);
 
         // Load the GLB model
         const loader = new THREE.GLTFLoader();
         loader.load(
-            './New-Year-Wishes-AR.glb', // Ensure the path matches your setup
+            './public/assets/New-Year-Wishes-AR.glb', 
             function (gltf) {
                 const model = gltf.scene;
-
-                // Set model position and scale
-                model.scale.set(1, 1, 1);
-                model.position.set(0, 0, 0);
-
-                // Traverse model to ensure proper rendering
-                model.traverse((node) => {
-                    if (node.isMesh) {
-                        node.castShadow = true;
-                        node.receiveShadow = true;
-
-                        // Check for materials and enable proper rendering
-                        if (node.material) {
-                            node.material.metalness = 0; // Adjust if metallic look is causing artifacts
-                            node.material.roughness = 0.5; // Tune roughness for smooth visuals
-                        }
-                    }
-                });
-
+                model.scale.set(1, 1, 1); // Adjust scale if the model is too large or small
+                model.position.set(0, 0, 0); // Center the model in the scene
                 scene.add(model);
             },
             undefined,
@@ -71,10 +54,8 @@
             }
         );
 
-        // Camera position
-        camera.position.set(3, 3, 7); // Adjust for better framing
-
-        // Animation loop
+        // Camera position and animation loop
+        camera.position.set(3, 3, 7); // Adjusted camera position to better view the model
         function animate() {
             requestAnimationFrame(animate);
             renderer.render(scene, camera);
