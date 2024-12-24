@@ -8,7 +8,7 @@
         body {
             margin: 0;
             overflow: hidden;
-            background-color: #f0f0f0; /* Optional */
+            background-color: #f0f0f0;
         }
         #container {
             width: 100vw;
@@ -21,48 +21,61 @@
 <body>
     <div id="container"></div>
     <script>
-        // Create scene, camera, and renderer
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById('container').appendChild(renderer.domElement);
 
-        // Add ambient light (soft, global lighting)
-        const ambientLight = new THREE.AmbientLight(0x404040, 2); // Soft light
+        // Lights
+        const ambientLight = new THREE.AmbientLight(0x404040, 5);
         scene.add(ambientLight);
 
-        // Add directional light (strong, focused lighting)
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
-        directionalLight.position.set(5, 5, 5); // Position the light
-        directionalLight.castShadow = true; // Enable shadows if needed
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 5);
+        directionalLight.position.set(5, 5, 5);
         scene.add(directionalLight);
 
-        // Load the GLB model
+        // Grid Helper
+        const gridHelper = new THREE.GridHelper(10, 10);
+        scene.add(gridHelper);
+
+        // Load GLB Model
         const loader = new THREE.GLTFLoader();
         loader.load(
             './public/assets/New-Year-Wishes-AR.glb', 
             function (gltf) {
+                console.log("Model Loaded Successfully:", gltf);
                 const model = gltf.scene;
-                model.scale.set(1, 1, 1); // Adjust scale if the model is too large or small
-                model.position.set(0, 0, 0); // Center the model in the scene
+                model.scale.set(1, 1, 1);
+                model.position.set(0, 0, 0);
                 scene.add(model);
             },
-            undefined,
+            function (xhr) {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+            },
             function (error) {
                 console.error('Error loading model:', error);
             }
         );
 
-        // Camera position and animation loop
-        camera.position.set(3, 3, 7); // Adjusted camera position to better view the model
+        // Add a Cube for Testing
+        const geometry = new THREE.BoxGeometry();
+        const material = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
+        const cube = new THREE.Mesh(geometry, material);
+        cube.position.set(0, 0, -2); // Test Position
+        scene.add(cube);
+
+        // Camera and Animation Loop
+        camera.position.set(0, 2, 5);
+        camera.lookAt(0, 0, 0);
+
         function animate() {
             requestAnimationFrame(animate);
             renderer.render(scene, camera);
         }
         animate();
 
-        // Handle window resize
+        // Handle Window Resize
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
